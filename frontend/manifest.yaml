@@ -72,8 +72,21 @@ spec:
         project: expense
     spec:
       containers:
+      volumes:
+      - name: nginx
+        configMap:
+          name: nginx
+          items:
+            - key: nginx.conf
+              path: nginx.conf
         - name: frontend
           image: joindevops/frontend:1.0.0
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+        
 
 ---
 apiVersion: v1
