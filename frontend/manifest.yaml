@@ -30,15 +30,19 @@ data:
         include /etc/nginx/conf.d/*.conf;
 
         server {
-            listen       8080 default_server;
-            listen       [::]:8080 default_server;
-            server_name  _;
-            root         /usr/share/nginx/html;
+            listen 8080 default_server;
+            listen [::]:8080 default_server;
+            server_name _;
+            root /usr/share/nginx/html;
 
             include /etc/nginx/default.d/*.conf;
 
             error_page 404 /404.html;
             location = /40x.html {}
+
+            location /api/ {
+                proxy_pass http://backend:8080/;
+            }
 
             error_page 500 502 503 504 /50x.html;
             location = /50x.html {}
@@ -101,4 +105,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 8080
