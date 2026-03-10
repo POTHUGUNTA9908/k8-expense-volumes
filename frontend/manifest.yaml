@@ -38,12 +38,10 @@ data:
             include /etc/nginx/default.d/*.conf;
 
             error_page 404 /404.html;
-            location = /40x.html {
-            }
+            location = /40x.html {}
 
             error_page 500 502 503 504 /50x.html;
-            location = /50x.html {
-            }
+            location = /50x.html {}
         }
     }
 
@@ -72,13 +70,6 @@ spec:
         project: expense
     spec:
       containers:
-      volumes:
-      - name: nginx
-        configMap:
-          name: nginx
-          items:
-            - key: nginx.conf
-              path: nginx.conf
         - name: frontend
           image: joindevops/frontend:1.0.0
           volumeMounts:
@@ -86,7 +77,14 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
               readOnly: true
-        
+
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx
+            items:
+              - key: nginx.conf
+                path: nginx.conf
 
 ---
 apiVersion: v1
